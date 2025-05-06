@@ -64,7 +64,7 @@
 
     table {
       width: 92%;
-      margin: 1px auto 100px auto;
+      margin: 1px auto 30px auto;
       font-size: 13px;
       border-collapse: collapse;
     }
@@ -91,12 +91,12 @@
       background-color: #333;
     }
 
-    .orange-text, .orange-text-b { color: #ffa500; font-weight: bold; }
-    .red-text { color: #ff6060; font-weight: bold; }
+    .orange-text, .orange-text-b { color: #ff922c; font-weight: bold; }
+    .red-text { color: #ff4242; font-weight: bold; }
     .green-text { color: #87ca69; font-weight: bold; }
-    .red-bold-text { color: #ff6060; font-weight: bold; font-size: 14px; }
-    .positive-value { color: #87ca69; font-weight: bold; }
-    .negative-value { color: #ffa500; font-weight: bold; }
+    .red-bold-text { color: #ff4242; font-weight: bold; font-size: 14px; }
+    .positive-value { color: #97e771; font-weight: bold; }
+    .negative-value { color: #ff922c; font-weight: bold; }
     .zero-value { color: transparent; }
     .light-blue-text { color: #7dd8ff; font-weight: bold; }
 
@@ -141,10 +141,10 @@
   </style>
 
   <script>
-    const SHEET_ID = '1LZ7ILQp5zvTeQswkqbTxS59gKuY0ejUkuf_mLG3Hi5A';
+    const SHEET_ID = '1GnLKNsS5hfKbw7zbD72t19HnMuo1ymBWalRVJZ0nbbI';
     const API_KEY = 'AIzaSyDetlPtSq3X71_aNuPOnkrZOqMXaOvYIh0';
     const SHEET_RANGE_1 = 'API41!A2:C3';
-    const SHEET_RANGE_2 = 'API41!A4:G34';
+    const SHEET_RANGE_2 = 'API41!A4:G44';
     const SHEET_RANGE_E2 = 'API41!E2';
 
     function setColumnWidths(widths) {
@@ -194,8 +194,8 @@
               tableContent2 += `<tr class="${rowClass}">`;
               row.forEach((cell, i) => {
                 let cellClass = '';
-                if (i === 0 && rowNumber >= 5 && rowNumber <= 25) cellClass = 'orange-text';
-                if (i === 1 && rowNumber >= 5 && rowNumber <= 25) cellClass = 'orange-text-b';
+                if (i === 0 && rowNumber >= 5 && rowNumber <= 60) cellClass = 'orange-text';
+                if (i === 1 && rowNumber >= 5 && rowNumber <= 60) cellClass = 'orange-text-b';
                 if (i === 4 && rowNumber >= 5) cellClass = 'red-bold-text';
                 if (i === 5 && rowNumber >= 5) cellClass = 'light-blue-text';
                 if (i === 6 && rowNumber >= 5) {
@@ -275,7 +275,7 @@ setTimeout(() => {
     <button id="liveSheetBtn" onclick="switchApp(2)">
       🔴 Live Sheet 
       <img id="btnGif" src="oiacatspin.gif" alt="Loading..." style="height:18px; display:none; vertical-align:middle; margin-left:10px; margin-top:6px; transform:scale(2.5);" />
-      <img id="btnFace" src="oiacatface.gif" alt="Face" style="height:18px; vertical-align:middle; margin-left:10px; margin-top:6px; transform:scale(2.5);" />
+      <img id="btnFace" src="oiacatface.gif" alt="Face" style="height:18px; vertical-align:middle; margin-left:12px; margin: top 3px;px; transform:scale(2.5);" />
     </button>
   </div>
 
