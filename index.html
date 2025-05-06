@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ลงเวลาตีแบดกันครับ🏸</title>
+
+  <!-- Web Thumbnail -->
+  <meta property="og:image" content="https://bmc4.d327dwnsxpqgkn.amplifyapp.com/BMC4_Thumbnail.jpg" />
+  <meta property="og:title" content="ลงเวลาตีแบดกันครับ🏸" />
+  <meta property="og:description" content="Badminton Calculator 4.0" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://bmc4.d327dwnsxpqgkn.amplifyapp.com" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #000000;
+      color: #e0e0e0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      height: 100vh;
+      position: relative;
+    }
+
+    .buttons-container {
+      text-align: center;
+      margin: 1px 0;
+    }
+
+    .buttons-container button {
+        background-color: #333333;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 3px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: background-color 0.3s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 45px;
+        min-width: 1px; /* 👈 Paste this line here */
+      
+    }
+
+    .buttons-container button:hover,
+    .buttons-container button.active {
+      background-color: hsl(108, 48%, 44%);
+    }
+
+    .container {
+      padding: 0;
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+    }
+
+    table {
+      width: 92%;
+      margin: 1px auto 100px auto;
+      font-size: 13px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 1px;
+      text-align: center;
+      font-size: 14px;
+      background-color: #000;
+      color: #fff;
+      border: none;
+    }
+
+    .table-a2-c3 {
+      width: 70%;
+      margin: 5px auto;
+      border-collapse: collapse;
+      font-size: 18px;
+      table-layout: fixed;
+    }
+
+    .highlight-row-2 td,
+    .highlight-row-4 td {
+      background-color: #333;
+    }
+
+    .orange-text, .orange-text-b { color: #ffa500; font-weight: bold; }
+    .red-text { color: #ff6060; font-weight: bold; }
+    .green-text { color: #87ca69; font-weight: bold; }
+    .red-bold-text { color: #ff6060; font-weight: bold; font-size: 14px; }
+    .positive-value { color: #87ca69; font-weight: bold; }
+    .negative-value { color: #ffa500; font-weight: bold; }
+    .zero-value { color: transparent; }
+    .light-blue-text { color: #7dd8ff; font-weight: bold; }
+
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+
+    .hidden { display: none; }
+
+    footer {
+      color: #e0e0e0;
+      text-align: center;
+      padding: 5px 0;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      font-size: 10px;
+      background-color: #000;
+      z-index: 100;
+    }
+
+    footer a {
+      color: #ffe7b9;
+      text-decoration: none;
+    }
+
+    .e2-text-left {
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: #ffe592;
+      padding-bottom: 5px;
+    }
+
+    .col-width-0, .col-width-1, .col-width-2, .col-width-3,
+    .col-width-4, .col-width-5, .col-width-6 {
+      width: auto;
+    }
+  </style>
+
+  <script>
+    const SHEET_ID = '1LZ7ILQp5zvTeQswkqbTxS59gKuY0ejUkuf_mLG3Hi5A';
+    const API_KEY = 'AIzaSyDetlPtSq3X71_aNuPOnkrZOqMXaOvYIh0';
+    const SHEET_RANGE_1 = 'API41!A2:C3';
+    const SHEET_RANGE_2 = 'API41!A4:G34';
+    const SHEET_RANGE_E2 = 'API41!E2';
+
+    function setColumnWidths(widths) {
+      widths.forEach((width, index) => {
+        const style = document.createElement('style');
+        style.innerHTML = `.col-width-${index} { width: ${width}; }`;
+        document.head.appendChild(style);
+      });
+    }
+
+    function fetchSheetData() {
+      const url1 = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_RANGE_1}?key=${API_KEY}`;
+      const url2 = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_RANGE_2}?key=${API_KEY}`;
+      const urlE2 = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_RANGE_E2}?key=${API_KEY}`;
+
+      Promise.all([fetch(url1), fetch(url2), fetch(urlE2)])
+        .then(responses => Promise.all(responses.map(res => res.json())))
+        .then(data => {
+          const rows1 = data[0].values;
+          const rows2 = data[1].values;
+          const e2 = data[2].values[0][0];
+
+          let tableContent1 = `<tr><td colspan="3" class="highlight-row-2"><div class="e2-text-left">ค่าตีแบดวันที่ ${e2}</div></td></tr>`;
+          if (rows1 && rows1.length) {
+            rows1.forEach((row, index) => {
+              const rowClass = index === 0 ? 'highlight-row-2' : '';
+              tableContent1 += `<tr class="${rowClass}">`;
+              row.forEach((cell, i) => {
+                let cellClass = '';
+                if (index === 1) {
+                  if (i < 2) cellClass = 'red-text';
+                  else if (i === 2) cellClass = 'green-text';
+                }
+                tableContent1 += `<td class="${cellClass}">${cell}</td>`;
+              });
+              tableContent1 += `</tr>`;
+            });
+          }
+
+          let tableContent2 = '';
+          if (rows2 && rows2.length) {
+            rows2.forEach((row, idx) => {
+              const rowNumber = idx + 4;
+              if (!row[3] || row[3].trim() === '') return;
+
+              const rowClass = rowNumber === 4 ? 'highlight-row-4' : '';
+              tableContent2 += `<tr class="${rowClass}">`;
+              row.forEach((cell, i) => {
+                let cellClass = '';
+                if (i === 0 && rowNumber >= 5 && rowNumber <= 25) cellClass = 'orange-text';
+                if (i === 1 && rowNumber >= 5 && rowNumber <= 25) cellClass = 'orange-text-b';
+                if (i === 4 && rowNumber >= 5) cellClass = 'red-bold-text';
+                if (i === 5 && rowNumber >= 5) cellClass = 'light-blue-text';
+                if (i === 6 && rowNumber >= 5) {
+                  const value = parseFloat(cell) || 0;
+                  if (value > 0) cellClass = 'positive-value';
+                  else if (value < 0) cellClass = 'negative-value';
+                  else cell = '';
+                }
+                tableContent2 += `<td class="col-width-${i} ${cellClass}">${cell}</td>`;
+              });
+              tableContent2 += `</tr>`;
+            });
+          }
+
+          document.getElementById('dateDisplay1').innerHTML = `<table class="table-a2-c3">${tableContent1}</table>`;
+          document.getElementById('dateDisplay2').innerHTML = `<table class="table2">${tableContent2}</table>`;
+          setColumnWidths(['12%', '12%', '2%', '26%', '18%', '7%', '23%']);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+          document.getElementById('dateDisplay1').innerHTML = '<p>Error loading A2:C3</p>';
+          document.getElementById('dateDisplay2').innerHTML = '<p>Error loading A4:G34</p>';
+        });
+    }
+
+    function switchApp(appNumber) {
+      const oiaSound = document.getElementById('oiaSound');
+      const buttons = document.querySelectorAll('.buttons-container button');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      const gifInBtn = document.getElementById('btnGif');
+      const faceInBtn = document.getElementById('btnFace');
+      const liveBtn = document.getElementById('liveSheetBtn');
+
+      if (appNumber === 1) {
+        document.getElementById('app1').classList.remove('hidden');
+        document.getElementById('app2').classList.add('hidden');
+        buttons[0].classList.add('active');
+        liveBtn.textContent = '🔴 Live Sheet';
+        gifInBtn.style.display = 'none';
+        faceInBtn.style.display = 'inline-block';
+        liveBtn.appendChild(gifInBtn);
+        liveBtn.appendChild(faceInBtn);
+      } else {
+        oiaSound.play().catch(e => console.log("Audio play blocked:", e));
+        gifInBtn.style.display = 'inline-block';
+        faceInBtn.style.display = 'none';
+
+        setTimeout(() => {
+          gifInBtn.style.display = 'none';
+          faceInBtn.style.display = 'inline-block';
+        }, 1500);
+
+        document.getElementById('app2').classList.remove('hidden');
+        document.getElementById('app1').classList.add('hidden');
+        fetchSheetData();
+        liveBtn.classList.add('active');
+        liveBtn.firstChild.textContent = '🔴 Updating... ';
+setTimeout(() => {
+    liveBtn.firstChild.textContent = '🔴 Live Sheet ';
+}, 1500);
+
+      }
+    }
+
+    window.onload = function () {
+      setTimeout(() => {
+        document.querySelector('.buttons-container button:first-child').click();
+      }, 100);
+    };
+  </script>
+</head>
+
+<body>
+  <div class="buttons-container">
+    <button onclick="switchApp(1)">✍🏻 Check-in</button>
+    <button id="liveSheetBtn" onclick="switchApp(2)">
+      🔴 Live Sheet 
+      <img id="btnGif" src="oiacatspin.gif" alt="Loading..." style="height:18px; display:none; vertical-align:middle; margin-left:10px; margin-top:6px; transform:scale(2.5);" />
+      <img id="btnFace" src="oiacatface.gif" alt="Face" style="height:18px; vertical-align:middle; margin-left:10px; margin-top:6px; transform:scale(2.5);" />
+    </button>
+  </div>
+
+  <audio id="oiaSound" src="oia.mp3" preload="auto"></audio>
+
+  <div id="app1" class="container hidden">
+    <iframe data-tally-src="https://tally.so/embed/wzOyd8?hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" title="ลงเวลาตีแบดกันครับ🏸"></iframe>
+    <script>
+      var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(e=>{e.src=e.dataset.tallySrc})};
+      if("undefined"!=typeof Tally)v();else if(!d.querySelector(`script[src="${w}"]`)){var s=d.createElement("script");s.src=w;s.onload=v;s.onerror=v;d.body.appendChild(s);}
+    </script>
+  </div>
+
+  <div id="app2" class="container hidden">
+    <div id="dateDisplay1" class="loading">
+      <img src="oiacatface.gif" alt="Loading..." style="height: 300px; margin-top: 80px;" />
+    </div>        
+    <div id="dateDisplay2" class="loading"></div>
+  </div>
+
+  <footer>
+    BMC V4.1 Proudly powered by <a href="https://fb.com/kittipat.kk" target="_blank">Max</a>
+  </footer>
+</body>
+</html>
